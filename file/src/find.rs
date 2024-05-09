@@ -13,7 +13,7 @@ impl Find {
     }
 
     /// Returns the lines that contain the string given
-    pub fn find_lines(&mut self, string: &str) -> Vec<(usize, String)> {
+    pub fn find_lines(&self, string: &str) -> Vec<(usize, String)> {
         let mut instances: Vec<(usize, String)> = Vec::new();
         for line in &self.lines {
             // accessing string in tuple (number, string)
