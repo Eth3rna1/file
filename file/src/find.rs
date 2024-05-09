@@ -1,7 +1,7 @@
 /*
     Find specific lines containing the string instances wanted
 */
-use crate::tool::Constructor;
+use crate::tool::{self, Constructor};
 
 pub struct Find {
     pub lines: Vec<(usize, String)>,
@@ -13,19 +13,26 @@ impl Find {
     }
 
     /// Returns the lines that contain the string given
-    pub fn find_lines(&mut self, string: &str) -> Option<Vec<(usize, String)>> {
+    pub fn find_lines(&mut self, string: &str) -> Vec<(usize, String)> {
         let mut instances: Vec<(usize, String)> = Vec::new();
         for line in &self.lines {
+            // accessing string in tuple (number, string)
             if line.1.contains(string) {
-                // accessing string in tuple (number, string)
                 instances.push(line.clone());
             }
         }
-        if instances.is_empty() {
-            return None;
-        }
-        Some(instances)
+        instances
     }
 }
 
-impl Constructor for Find {}
+impl Constructor for Find {
+    fn construct(&self, lines : &[(usize, String)]) -> String {
+        let mut interface: Vec<String> = Vec::new();
+        let max_char_count = tool::len(&lines[lines.len() - 1].0) + 1;
+        for (index, line) in lines {
+            let space = " ".repeat(max_char_count - tool::len(index));
+            interface.push(format!("{}:{}{}", index, space, line));
+        }
+        interface.join("\n")
+    }
+}
